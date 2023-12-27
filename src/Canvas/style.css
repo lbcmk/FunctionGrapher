@@ -1,0 +1,15 @@
+@font-face {
+    font-family: 'Inter';
+    src: local('Inter'), url("../../public/assets/font/Inter-Font.ttf") format('truetype');
+}
+
+.Canvas {
+    overflow: hidden;
+    background-color: #FFF;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    object-fit: contain;
+}
+.Canvas:focus { outline: none; }
