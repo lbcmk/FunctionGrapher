@@ -356,7 +356,7 @@ function drawVector(start, end, color="#ff7974", lineWidth=2, context, scale, or
 	context.fillStyle = color
 	context.strokeStyle = color
 	context.beginPath();
-	context.moveTo(origin.x+(scale*start.x), origin.y+(scale*start.y));
+	context.moveTo(origin.x+(scale*start.x), origin.y+(scale*-start.y));
 	context.lineTo(origin.x+(scale*end.x), origin.y+(scale*-end.y));
 	context.stroke();
 	context.beginPath();
