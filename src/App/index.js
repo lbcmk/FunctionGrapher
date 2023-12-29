@@ -30,7 +30,23 @@ export default function App() {
 			type: "function",
 			function: (x)=>x - 5*x,
 			color: "#628efc",
+			lineWidth: 4,
 		},
+		{
+			type: "vector",
+			coordinates: {
+				start: {
+					x: 0,
+					y: 0,
+				},
+				end: {
+					x: 5,
+					y: 3,
+				},
+			},
+			color: "#d5a2d6",
+			lineWidth: 2,
+		}
 	]);
 
 	return (

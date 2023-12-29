@@ -185,6 +185,8 @@ export const drawGrid = (context, origin, width, height, scale) => {
 	context.textAlign = "center";
 	context.textBaseline = "middle";
 
+	var placeX, placeY;
+
 	// Ticks numbers along the X axis.
 	for (let index = 1; ; index += 1) {
 		let x = origin.x + (scale * index);
@@ -193,7 +195,7 @@ export const drawGrid = (context, origin, width, height, scale) => {
 			break;
 		}
 
-		var placeY = getPlaceY(context, origin, height);
+		placeY = getPlaceY(context, origin, height);
 		placeText(context, index, x, placeY, scale);
 	}
 
@@ -204,7 +206,7 @@ export const drawGrid = (context, origin, width, height, scale) => {
 			break;
 		}
 
-		var placeY = getPlaceY(context, origin, height);
+		placeY = getPlaceY(context, origin, height);
 		placeText(context, -index, x, placeY, scale);
 	}
 
@@ -216,7 +218,7 @@ export const drawGrid = (context, origin, width, height, scale) => {
 			break;
 		}
 
-		var placeX = getPlaceX(context, origin, width);
+		placeX = getPlaceX(context, origin, width);
 		placeText(context, -index, placeX, y, scale);
 	}
 
@@ -227,7 +229,7 @@ export const drawGrid = (context, origin, width, height, scale) => {
 			break;
 		}
 
-		var placeX = getPlaceX(context, origin, width);
+		placeX = getPlaceX(context, origin, width);
 		placeText(context, index, placeX, y, scale);
 	}
 };
@@ -295,7 +297,10 @@ export const drawProjections = (context, origin, scale, objects) => {
 				context.globalAlpha = 1;
 				break;
 			case "function":
-				plot(object.function, object.color, context, scale, origin);
+				plot(object.function, object.color, object.lineWidth, context, scale, origin);
+				break;
+			case "vector":
+				drawVector(object.coordinates.start, object.coordinates.end, object.color, object.lineWidth, context, scale, origin);
 				break;
 			default:
 				break;
@@ -303,7 +308,7 @@ export const drawProjections = (context, origin, scale, objects) => {
 	});
 };
 
-function plot(func, color, context, scale, origin) {
+function plot(func, color, lineWidth=2, context, scale, origin) {
 	var invScale = 1 / scale;
 	var subStep = invScale / 10;
 	var yy; // previous Y value
@@ -315,7 +320,7 @@ function plot(func, color, context, scale, origin) {
 
 	// set render styles
 	context.strokeStyle = color;
-	context.lineWidth = 2;
+	context.lineWidth = lineWidth;
 
 	context.beginPath();
 	for(let x = start; x < end; x += invScale){ // pixel steps
@@ -344,6 +349,19 @@ function plot(func, color, context, scale, origin) {
 		}
 	}
 	context.stroke();
+}
+
+function drawVector(start, end, color="#ff7974", lineWidth=2, context, scale, origin) {
+	context.lineWidth = lineWidth;
+	context.fillStyle = color
+	context.strokeStyle = color
+	context.beginPath();
+	context.moveTo(origin.x+(scale*start.x), origin.y+(scale*start.y));
+	context.lineTo(origin.x+(scale*end.x), origin.y+(scale*-end.y));
+	context.stroke();
+	context.beginPath();
+	context.arc(origin.x+(scale*end.x), origin.y-(scale*end.y), scale/10, 0, 2 * Math.PI);
+	context.fill(); 
 }
 
 function getPlaceX(context, origin, width) {
@@ -378,4 +396,4 @@ function placeText(context, index, x, y, scale) {
 		context.strokeText(`${index}`, x, y);
 		context.fillText(`${index}`, x, y);
 	}
-} 
+}
